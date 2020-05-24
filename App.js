@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -10,7 +10,8 @@ import TrackCreateScreen from './src/screens/TrackCreateScreen';
 import TrackListScreen from './src/screens/TrackListScreen';
 import TrackDetailScreen from './src/screens/TrackDetailScreen';
 
-import {Provider as AuthProvider} from './src/context/AuthContext';
+import {Provider as AuthProvider, Context} from './src/context/AuthContext';
+import {setNavigator} from './src/navigationRef';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -25,9 +26,10 @@ function TrackList() {
 }
 
 const App = () => {
+  const {state} = useContext(Context);
   return (
     <NavigationContainer>
-      {true ? (
+      {!state.token ? (
         <Stack.Navigator>
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="Signin" component={SigninScreen} />
@@ -46,7 +48,7 @@ const App = () => {
 export default () => {
   return (
     <AuthProvider>
-      <App />
+      <App ref={(navigator) => setNavigator(navigator)} />
     </AuthProvider>
   );
 };
