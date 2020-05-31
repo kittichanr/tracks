@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Context as AuthContext} from '../context/AuthContext';
 import AuthForm from '../components/AuthForm';
@@ -8,8 +8,11 @@ const SignupScreen = ({navigation}) => {
   navigation.setOptions({
     header: () => null,
   });
-  const {state, signup} = useContext(AuthContext);
-
+  const {state, signup, clearErrorMessage} = useContext(AuthContext);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', clearErrorMessage);
+    return unsubscribe;
+  });
   return (
     <View style={styles.container}>
       <AuthForm
