@@ -12,7 +12,6 @@ import TrackDetailScreen from './src/screens/TrackDetailScreen';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 
 import {Provider as AuthProvider, Context} from './src/context/AuthContext';
-import {navigationRef, isMountedRef} from './src/navigationRef';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -27,18 +26,16 @@ function TrackList() {
 }
 
 const App = () => {
-  useEffect(() => {
-    setTimeout(() => {
-      isMountedRef.current = true;
-      return () => (isMountedRef.current = false);
-    }, 100);
-  });
   const {state} = useContext(Context);
+
+  if (state.isLoading) {
+    return <ResolveAuthScreen />;
+  }
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer>
       {!state.token ? (
         <Stack.Navigator>
-          <Stack.Screen name="ResolveAuth" component={ResolveAuthScreen} />
+          {/* <Stack.Screen name="ResolveAuth" component={ResolveAuthScreen} /> */}
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="Signin" component={SigninScreen} />
         </Stack.Navigator>

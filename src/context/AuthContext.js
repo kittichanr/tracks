@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import createDataContext from './createDataContext';
 import trackApi from '../api/tracker';
-import {navigate} from '../navigationRef';
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -11,22 +10,21 @@ const authReducer = (state, action) => {
       return {errMessage: '', token: action.payload};
     case 'clear_error_message':
       return {...state, errMessage: ''};
+    case 'restore_token':
+      return {token: action.payload, isLoading: false, errMessage: ''};
+    case 'signout':
+      return {token: null, errMessage: ''};
     default:
-      return state;
+      state;
   }
 };
 
 const tryLocalSignIn = (dispatch) => async () => {
   const token = await AsyncStorage.getItem('token');
-  if (token) {
-    dispatch({
-      type: 'signin',
-      payload: token,
-    });
-    navigate('TrackList');
-  } else {
-    navigate('Signup');
-  }
+  dispatch({
+    type: 'restore_token',
+    payload: token,
+  });
 };
 
 const clearErrorMessage = (dispatch) => () => {
@@ -65,12 +63,15 @@ const signin = (dispatch) => async ({email, password}) => {
   }
 };
 
-const signout = (dispatch) => {
-  return ({email, password}) => {};
+const signout = (dispatch) => async () => {
+  await AsyncStorage.removeItem('token');
+  dispatch({
+    type: 'signout',
+  });
 };
 
 export const {Context, Provider} = createDataContext(
   authReducer,
   {signin, signout, signup, clearErrorMessage, tryLocalSignIn},
-  {token: null, errMessage: ''},
+  {token: null, errMessage: '', isLoading: true},
 );
