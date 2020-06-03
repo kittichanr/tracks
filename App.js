@@ -9,6 +9,7 @@ import SigninScreen from './src/screens/SigninScreen';
 import TrackCreateScreen from './src/screens/TrackCreateScreen';
 import TrackListScreen from './src/screens/TrackListScreen';
 import TrackDetailScreen from './src/screens/TrackDetailScreen';
+import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 
 import {Provider as AuthProvider, Context} from './src/context/AuthContext';
 import {navigationRef, isMountedRef} from './src/navigationRef';
@@ -37,6 +38,7 @@ const App = () => {
     <NavigationContainer ref={navigationRef}>
       {!state.token ? (
         <Stack.Navigator>
+          <Stack.Screen name="ResolveAuth" component={ResolveAuthScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="Signin" component={SigninScreen} />
         </Stack.Navigator>
