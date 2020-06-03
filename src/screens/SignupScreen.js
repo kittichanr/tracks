@@ -8,9 +8,12 @@ const SignupScreen = ({navigation}) => {
   navigation.setOptions({
     header: () => null,
   });
-  const {state, signup, clearErrorMessage} = useContext(AuthContext);
+  const {state, signup, clearErrorMessage, tryLocalSignIn} = useContext(
+    AuthContext,
+  );
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', clearErrorMessage);
+    tryLocalSignIn();
     return unsubscribe;
   });
   return (

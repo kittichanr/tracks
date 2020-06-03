@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -11,7 +11,7 @@ import TrackListScreen from './src/screens/TrackListScreen';
 import TrackDetailScreen from './src/screens/TrackDetailScreen';
 
 import {Provider as AuthProvider, Context} from './src/context/AuthContext';
-import {setNavigator} from './src/navigationRef';
+import {navigationRef, isMountedRef} from './src/navigationRef';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,9 +26,15 @@ function TrackList() {
 }
 
 const App = () => {
+  useEffect(() => {
+    setTimeout(() => {
+      isMountedRef.current = true;
+      return () => (isMountedRef.current = false);
+    }, 100);
+  });
   const {state} = useContext(Context);
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       {!state.token ? (
         <Stack.Navigator>
           <Stack.Screen name="Signup" component={SignupScreen} />
@@ -48,7 +54,7 @@ const App = () => {
 export default () => {
   return (
     <AuthProvider>
-      <App ref={(navigator) => setNavigator(navigator)} />
+      <App />
     </AuthProvider>
   );
 };
