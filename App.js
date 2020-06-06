@@ -12,6 +12,7 @@ import TrackDetailScreen from './src/screens/TrackDetailScreen';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 
 import {Provider as AuthProvider, Context} from './src/context/AuthContext';
+import {Provider as LocationProvider} from './src/context/LocationContext';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -52,8 +53,10 @@ const App = () => {
 
 export default () => {
   return (
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <LocationProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </LocationProvider>
   );
 };

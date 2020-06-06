@@ -1,11 +1,11 @@
 import '../_mockLocation';
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, Platform} from 'react-native';
-import Geolocation from '@react-native-community/geolocation';
 import {Text} from 'react-native-elements';
 import {SafeAreaView} from 'react-navigation';
-import {watchPositionAsync, Accuracy} from 'expo-location';
 import Map from '../components/map';
+import {watchPositionAsync, Accuracy} from 'expo-location';
+import Geolocation from '@react-native-community/geolocation';
 
 const TrackCreateScreen = () => {
   const [err, setErr] = useState(null);
