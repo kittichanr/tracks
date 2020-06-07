@@ -3,14 +3,15 @@ import {Platform} from 'react-native';
 import {watchPositionAsync, Accuracy} from 'expo-location';
 import Geolocation from '@react-native-community/geolocation';
 
-export default (callback) => {
+export default (shouldTrack, callback) => {
   const [err, setErr] = useState(null);
+  const [subscriber, setSubscriber] = useState(null);
 
   const startWatching = async () => {
     try {
       if (Platform.OS === 'ios') {
         await Geolocation.requestAuthorization();
-        await watchPositionAsync(
+        const sub = await watchPositionAsync(
           {
             accuracy: Accuracy.BestForNavigation,
             timeInterval: 1000,
@@ -18,6 +19,7 @@ export default (callback) => {
           },
           callback,
         );
+        setSubscriber(sub);
       }
     } catch (e) {
       setErr(e);
@@ -25,8 +27,13 @@ export default (callback) => {
   };
 
   useEffect(() => {
-    startWatching();
-  });
+    if (shouldTrack) {
+      startWatching();
+    } else {
+      subscriber.remove();
+      setSubscriber(null);
+    }
+  }, [shouldTrack]);
 
   return [err];
 };
