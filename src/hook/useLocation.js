@@ -33,7 +33,8 @@ export default (shouldTrack, callback) => {
       subscriber.remove();
       setSubscriber(null);
     }
-  }, [shouldTrack]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldTrack, callback]);
 
   return [err];
 };
