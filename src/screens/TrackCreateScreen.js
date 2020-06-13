@@ -13,15 +13,18 @@ import TrackForm from '../components/TrackForm';
 
 const TrackCreateScreen = ({navigation}) => {
   const isFocused = useIsFocused();
-  const {state, addLocation} = useContext(LocationContext);
+  const {
+    state: {recording},
+    addLocation,
+  } = useContext(LocationContext);
   const callback = useCallback(
     (location) => {
-      addLocation(location, state.recording);
+      addLocation(location, recording);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [state.recording],
+    [recording],
   );
-  const [err] = useLocation(isFocused, callback);
+  const [err] = useLocation(isFocused || recording, callback);
 
   return (
     <SafeAreaView forceInset={{top: 'always'}}>
